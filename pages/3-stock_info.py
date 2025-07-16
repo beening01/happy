@@ -63,29 +63,30 @@ def sidebar_inputs() -> tuple[str, tuple[datetime.date, datetime.date], bool]:
     )
     st.sidebar.write(selected_dates)
     confirm_btn = st.sidebar.button('확인')
-	return company_name, selected_dates, confirm_btn
+    return company_name, selected_dates, confirm_btn
 
 company_name, selected_dates, confirm_btn = sidebar_inputs()
 
+if confirm_btn:
 
-# 우리가 필요로하는 코드조각들
+    # 우리가 필요로하는 코드조각들
 
-stock_code = get_stock_code_by_company(company_name)
-start_date = selected_dates[0].strftime(r"%Y-%m-%d")
-end_date = (selected_dates[1] + datetime.timedelta(days=1)).strftime(r"%Y-%m-%d")
-price_df = fdr.DataReader(f'KRX:{stock_code}', start_date, end_date)
+    stock_code = get_stock_code_by_company(company_name)
+    start_date = selected_dates[0].strftime(r"%Y-%m-%d")
+    end_date = (selected_dates[1] + datetime.timedelta(days=1)).strftime(r"%Y-%m-%d")
+    price_df = fdr.DataReader(f'KRX:{stock_code}', start_date, end_date)
 
-st.header(f'{company_name}의 현재 주가')
+    st.header(f'{company_name}의 현재 주가')
 
-st.dataframe(price_df)
+    st.dataframe(price_df)
 
-fig = go.Figure(data=[go.Candlestick(x=price_df.index,
-                        open=price_df['Open'],
-                        high=price_df['High'],
-                        low=price_df['Low'],
-                        close=price_df['Close'])])
-st.plotly_chart(fig)
+    fig = go.Figure(data=[go.Candlestick(x=price_df.index,
+                            open=price_df['Open'],
+                            high=price_df['High'],
+                            low=price_df['Low'],
+                            close=price_df['Close'])])
+    st.plotly_chart(fig)
 
-excel_data = BytesIO()
-price_df.to_excel(excel_data)
-st.download_button("엑셀 파일 다운로드", excel_data, file_name='stock_data.xlsx')
+    excel_data = BytesIO()
+    price_df.to_excel(excel_data)
+    st.download_button("엑셀 파일 다운로드", excel_data, file_name='stock_data.xlsx')
