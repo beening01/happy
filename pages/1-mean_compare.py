@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
 
-from preprocess import load_data
+from utils.preprocess import load_data
 
 # 데이터 불러오기
 df = load_data("districts.csv")
