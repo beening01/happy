@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from pathlib import Path
+import plotly.express as px
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import StandardScaler
@@ -68,4 +69,34 @@ if st.button("유사한 지역 추천받기"):
     result = recommend_similar_regions(df.copy(), selected_gu, weights, method=sim_method)
     st.subheader(f"🏙️ '{selected_gu}'와 유사한 지역 Top 3")
     st.table(result)
+
+    # ✅ Plotly 시각화 추가
+    st.subheader("📊 행복 요소별 점수 비교 (인터랙티브 그래프)")
+
+    # 시각화를 위한 데이터 준비
+    compare_gus = [selected_gu] + result.index.tolist()
+    features = ['자신의 건강상태', '자신의 재정상태', '주위 친지 친구와의 관계', '가정생활', '사회생활']
+    compare_df = df.loc[compare_gus, features]
+
+    # 데이터 형태를 Plotly용 long-format으로 변환
+    df_melted = compare_df.reset_index().melt(id_vars='index', value_vars=features,
+                                              var_name='행복 요소', value_name='점수')
+    df_melted.rename(columns={'index': '자치구'}, inplace=True)
+
+    # Plotly 그래프 생성
+    fig = px.bar(df_melted,
+                 x='행복 요소',
+                 y='점수',
+                 color='자치구',
+                 barmode='group',
+                 text='점수',
+                 height=500,
+                 title=f"{selected_gu}와 유사한 자치구의 행복 요소 비교")
+
+    fig.update_traces(texttemplate='%{text:.2f}', textposition='outside')
+    fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide')
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    
 
