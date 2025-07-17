@@ -18,7 +18,7 @@ def load_data(file_name):
     if ext in ['.xls', '.xlsx']:
         df = pd.read_excel(file_path)
     elif ext == '.csv':
-        df = pd.read_csv(file_path)
+        df = pd.read_csv(file_path, index_col=0)
     else:
         raise ValueError("지원하지 않는 파일 형식입니다: " + ext)
     
