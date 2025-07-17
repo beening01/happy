@@ -1,8 +1,10 @@
+import plotly.express as px
+import plotly.colors as pc
 import streamlit as st
 import pandas as pd
 import numpy as np
 from pathlib import Path
-import plotly.express as px
+
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import StandardScaler
@@ -50,19 +52,28 @@ selected_gu = st.selectbox("현재 거주 중인 자치구를 선택하세요:",
 
 # 3. 가중치 입력
 st.subheader("당신이 중요하게 생각하는 행복 요소의 중요도를 선택하세요 (1~5점)")
-w1 = st.slider("자신의 건강상태", 1, 5, 3)
-w2 = st.slider("자신의 재정상태", 1, 5, 3)
-w3 = st.slider("주위 친지 친구와의 관계", 1, 5, 3)
-w4 = st.slider("가정생활", 1, 5, 3)
-w5 = st.slider("사회생활", 1, 5, 3)
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    w1 = st.slider("건강상태", 1, 5, 3)
+    w2 = st.slider("재정상태", 1, 5, 3)
+
+with col2:
+    w3 = st.slider("친지/친구 관계", 1, 5, 3)
+    w4 = st.slider("가정생활", 1, 5, 3)
+
+with col3:
+    w5 = st.slider("사회생활", 1, 5, 3)
+
+    
 
 raw_weights = [w1, w2, w3, w4, w5]
 weight_sum = sum(raw_weights)
 weights = [w / weight_sum for w in raw_weights]
 
 # 4. 유사도 방식 선택
-method = st.radio("유사도 계산 방식", ["코사인 유사도", "유클리디안 거리"])
-sim_method = 'cosine' if method == "코사인 유사도" else 'euclidean'
+method = st.radio("유사도 계산 방식", ["코사인 유사도(패턴이 비슷한 지역 찾기-상대 중요도)", "유클리디안 거리(점수 자체가 가까운 지역 찾기-절대치 중요도)"])
+sim_method = 'cosine' if method == "코사인 유사도(패턴이 비슷한 지역 찾기-상대 중요도)" else 'euclidean'
 
 # 5. 결과 출력
 if st.button("유사한 지역 추천받기"):
@@ -71,17 +82,25 @@ if st.button("유사한 지역 추천받기"):
     st.table(result)
 
     # ✅ Plotly 시각화 추가
-    st.subheader("📊 행복 요소별 점수 비교 (인터랙티브 그래프)")
+    st.subheader("📊 행복 요소별 점수 비교")
 
     # 시각화를 위한 데이터 준비
     compare_gus = [selected_gu] + result.index.tolist()
     features = ['자신의 건강상태', '자신의 재정상태', '주위 친지 친구와의 관계', '가정생활', '사회생활']
     compare_df = df.loc[compare_gus, features]
 
+
     # 데이터 형태를 Plotly용 long-format으로 변환
-    df_melted = compare_df.reset_index().melt(id_vars='index', value_vars=features,
-                                              var_name='행복 요소', value_name='점수')
-    df_melted.rename(columns={'index': '자치구'}, inplace=True)
+    df_melted = compare_df.reset_index().melt(id_vars='구분', value_vars=features,
+                                          var_name='행복 요소', value_name='점수')
+    df_melted.rename(columns={'구분': '자치구'}, inplace=True)
+
+
+    # 유사도 기반 색상 만들기
+    # 유사한 지역 3개를 가져온다 (이미 result는 상위 3개만 있음)
+    color_list = ['#1f77b4', '#17becf', '#ffdd57']  # 진한 하늘, 청록, 노랑
+    color_map = {gu: color for gu, color in zip(result.index, color_list)}
+    color_map[selected_gu] = "#00008B"  # 선택한 지역: 남색
 
     # Plotly 그래프 생성
     fig = px.bar(df_melted,
@@ -91,6 +110,7 @@ if st.button("유사한 지역 추천받기"):
                  barmode='group',
                  text='점수',
                  height=500,
+                 color_discrete_map=color_map,
                  title=f"{selected_gu}와 유사한 자치구의 행복 요소 비교")
 
     fig.update_traces(texttemplate='%{text:.2f}', textposition='outside')
