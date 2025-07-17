@@ -9,7 +9,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import StandardScaler
 
-from preprocess import load_data
+from utils.preprocess import load_data
 
 @st.cache_data
 

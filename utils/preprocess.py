@@ -8,7 +8,7 @@ import os
 # 1. 데이터 로드
 # -----------------------------
 def load_data(file_name):
-    WORK_DIR = Path(__file__).parent
+    WORK_DIR = Path(__file__).resolve().parent.parent
     IN_DIR = WORK_DIR / "data"
     file_path = IN_DIR / file_name
     # 확장자 추출
