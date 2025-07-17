@@ -1,0 +1,5 @@
+# 파이썬 컴파일 파일
+__pycache__/
+*.pyc
+
+!h_timeseries.py
