@@ -38,7 +38,7 @@ def recommend_similar_regions(df, selected_gu, weights, top_n=3, method='cosine'
     return result[[ 'similarity']] if method == 'cosine' else result[['distance']]
 
 # Streamlit UI
-st.title("📍 My Happy Place: 서울 행복도 기반 유사 자치구 추천")
+st.title("📍서울 행복도 기반 유사 자치구 추천")
 
 # 1. 데이터 불러오기
 df = load_data("district_mean.csv")
