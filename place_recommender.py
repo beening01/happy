@@ -72,8 +72,8 @@ weight_sum = sum(raw_weights)
 weights = [w / weight_sum for w in raw_weights]
 
 # 4. 유사도 방식 선택
-method = st.radio("유사도 계산 방식", ["코사인 유사도(패턴이 비슷한 지역 찾기-상대 중요도)", "유클리디안 거리(점수 자체가 가까운 지역 찾기-절대치 중요도)"])
-sim_method = 'cosine' if method == "코사인 유사도(패턴이 비슷한 지역 찾기-상대 중요도)" else 'euclidean'
+method = st.radio("유사도 계산 방식", ["패턴이 비슷한 지역 찾기(코사인)", "점수 자체가 가까운 지역 찾기(유클리디안 거리)"])
+sim_method = 'cosine' if method == "패턴이 비슷한 지역 찾기(코사인)" else 'euclidean'
 
 # 5. 결과 출력
 if st.button("유사한 지역 추천받기"):
