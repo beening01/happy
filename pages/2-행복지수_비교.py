@@ -59,7 +59,7 @@ fig.add_trace(go.Scatterpolar(
     theta=항목목록,
     fill='toself',
     name=지역1,
-    line=dict(color="#55cbcd")
+    line=dict(color="#007bff")
 ))
 
 fig.add_trace(go.Scatterpolar(
@@ -67,7 +67,7 @@ fig.add_trace(go.Scatterpolar(
     theta=항목목록,
     fill='toself',
     name=지역2,
-    line=dict(color="#ff968a")
+    line=dict(color="#ff0037")
 ))
 
 fig.update_layout(
@@ -82,4 +82,4 @@ fig.update_layout(
     title=f"📌{지역1} vs {지역2} - 항목별 행복지수 평균 비교"
 )
 
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)

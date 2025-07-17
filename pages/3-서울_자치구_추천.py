@@ -11,6 +11,11 @@ from sklearn.preprocessing import StandardScaler
 
 from utils.preprocess import load_data
 
+st.set_page_config(
+    page_title="서울 자치구 추천",
+    layout="wide"
+)
+
 @st.cache_data
 
 
@@ -42,6 +47,7 @@ def recommend_similar_regions(df, selected_gu, weights, top_n=3, method='cosine'
 
 # Streamlit UI
 st.title("📍서울 행복도 기반 유사 자치구 추천")
+st.write("✅2020 ~ 2024년도 항목별 평균치")
 
 # 1. 데이터 불러오기
 df = load_data("district_mean.csv")
