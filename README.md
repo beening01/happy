@@ -8,6 +8,12 @@ _“내가 행복해질 수 있는 동네는 어디일까?”_
 
 이사, 거주지 선택 시 **행복이라는 기준**을 고려할 수 있도록 돕습니다.
 
+## 🔗 서비스 바로가기
+
+👉 [My Happy Place - 바로 체험하기](https://happy-disticts.streamlit.app/)
+
+[![Streamlit App](https://img.shields.io/badge/Streamlit-App-success?logo=streamlit)](https://happy-disticts.streamlit.app/)
+
 ---
 
 ## 🎯 주요 기능
