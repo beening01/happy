@@ -70,7 +70,7 @@ fig.update_layout(
     polar=dict(
         radialaxis=dict(
             visible=True,
-            range=[0, 8], # 점수 범위
+            range=[2, 8], # 점수 범위
             tickfont=dict(size=10)  # 글자 작게
         )
     ),
